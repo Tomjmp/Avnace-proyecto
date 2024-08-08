@@ -1,0 +1,58 @@
+votantes = {}
+categorias = ["Elección Presidente", "Concurso de Talentos"]
+votos = {categoria: {} for categoria in categorias}
+
+def registrar_votante(nombre, id):
+    if id not in votantes:
+        votantes[id] = nombre
+        return True
+    else:
+        return False
+
+def votar(votante_id, categoria, opcion):
+    if votante_id in votantes and categoria in categorias:
+        if categoria not in votos:
+            votos[categoria] = {}
+        if opcion in votos[categoria]:
+            votos[categoria][opcion] += 1
+        else:
+            votos[categoria][opcion] = 1
+        return True
+    return False
+
+def main():
+    while True:
+        nombre = input("Ingrese su nombre: ")
+        id = input("Ingrese su ID: ")
+        if registrar_votante(nombre, id):
+            print("Votante registrado.")
+            break
+        else:
+            print("ID ya registrado. Intente nuevamente.")
+    
+    for categoria in categorias:
+        print(f"Categoría: {categoria}")
+        opciones = input("Ingrese las opciones de voto separadas por coma: ").split(",")
+        votos[categoria] = {opcion.strip(): 0 for opcion in opciones}
+    
+    while True:
+        votante_id = input("Ingrese su ID para votar: ")
+        if votante_id not in votantes:
+            print("ID no registrado.")
+            continue
+        for categoria in categorias:
+            opcion = input(f"Elija su opción para {categoria}: ")
+            if votar(votante_id, categoria, opcion):
+                print(f"Voto registrado para {categoria}.")
+            else:
+                print(f"Opción inválida para {categoria}.")
+        break
+    
+    print("Resultados:")
+    for categoria, conteos in votos.items():
+        print(f"Categoría: {categoria}")
+        for opcion, conteo in conteos.items():
+            print(f"{opcion}: {conteo} votos")
+
+if __name__ == "__main__":
+    main()
